@@ -92,9 +92,9 @@
             <div class="provider-item">
               <button class="provider-row" onclick={() => openProvider(provider)} aria-label={`Abrir detalhes de ${provider.displayName}`} aria-describedby={previewId === provider.id ? `preview-${provider.id}` : undefined}
                 onpointerenter={() => previewId = provider.id}
-                onpointerleave={(event) => { if (document.activeElement !== event.currentTarget) previewId = null; }}
+                onpointerleave={(event) => { if (document.activeElement !== event.currentTarget && !event.currentTarget.parentElement?.contains(event.relatedTarget as Node | null)) previewId = null; }}
                 onfocus={() => previewId = provider.id}
-                onblur={(event) => { if (!event.currentTarget.matches(":hover")) previewId = null; }}
+                onblur={(event) => { if (!event.currentTarget.parentElement?.matches(":hover")) previewId = null; }}
                 onkeydown={(event) => { if (event.key === "Escape") { previewId = null; event.currentTarget.focus(); event.preventDefault(); } }}>
                 <span class="provider-logo" aria-hidden="true">{provider.displayName.slice(0,1)}</span>
                 <span class="provider-name"><strong>{provider.displayName}</strong><small>{providerStateLabel(provider.state)}</small></span>
