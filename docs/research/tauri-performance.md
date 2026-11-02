@@ -2,35 +2,45 @@
 
 ## Status
 
-**UNTESTED / DEFERRED.** No Tauri window started, so startup, idle RSS/CPU, and WebKitGTK rendering have no measurements. Do not use this report to accept or reject Tauri.
+**MEASURED / DECISION DEFERRED.** Three release-window runs completed on Mint Cinnamon/X11. No numeric acceptance thresholds have been approved, and keyboard navigation plus vertical scrolling at 1280×720 remain unverified.
 
 ## Environment and blocker
 
 - Linux Mint 22.3 Cinnamon, X11, x86_64.
-- `npm run tauri dev` in an ext4 copy of the exact source reached Rust compilation, then failed because `pkg-config` could not find `dbus-1` (`libdbus-1-dev`).
-- The environment diagnostic also reports missing `webkit2gtk-4.1`, `xdo`, Ayatana AppIndicator, and `librsvg-2.0` development files.
-- No packages were installed. There were zero native launches and zero performance runs.
+- The user installed Tauri's Linux development dependencies. `pkg-config` reports WebKitGTK 4.1 2.52.6, D-Bus 1.14.10, GTK 3.24.41, Ayatana AppIndicator 0.5.90, and librsvg 2.58.0. `libxdo-dev` 1:3.20160805.1-5build1 is installed; it does not provide an `xdo.pc` file.
+- The checkout is on VFAT, so the exact source files were copied to `/tmp/usag8-plan01` on ext4 for dependency installation, Rust builds, and native runs. No product source code was changed.
+- `npm run tauri build` completed the release profile in 1m23s and produced a 2.80 MiB DEB. The package was not installed.
 
 ## Repeatable method after prerequisites are available
 
 1. Record distro, desktop, session, architecture, Rust/Cargo/Node/npm, and `pkg-config` versions for WebKitGTK, OpenSSL, D-Bus, xdo, AppIndicator, and librsvg. Keep X11 and Wayland as separate rows.
 2. Run `npm run tauri build` once and record build time and errors separately; do not count build time as application startup.
-3. Launch the built app and time from process launch until the dashboard is usable. Repeat three cold launches and three warm launches where feasible; record each run and how the timing was taken.
-4. For each of three launches, leave the dashboard idle for five minutes. Record PID, elapsed time, `%CPU`, and RSS in KiB at launch, one minute, and five minutes using `ps -p <PID> -o pid,etime,%cpu,rss,comm`. Capture any sustained trend with the desktop system monitor and note its sampling interval.
+3. Launch the built app and record process start to the first matching X11 window in `wmctrl -lp`. This is a window-appearance proxy, not a precisely timed first-render event. Confirm rendered UI separately. Repeat three launches and report each timing.
+4. Leave each launch idle for five minutes. At first window, one minute, and five minutes, collect `%CPU` and RSS for the full process tree (Tauri plus WebKit child processes) using `ps`; sum both columns. Record the tree size and elapsed time.
 5. Record whether the empty state renders, theme choice, resize behavior, focus/keyboard behavior, and terminal/WebKitGTK errors. Attach no credentials or provider data.
 
 There are no invented pass/fail thresholds. Compare only the measured startup, idle resource use, and rendering behavior against the project's actual usability requirements once those requirements are approved.
 
 ## Measurements
 
-| Measure | Result |
+All runs used the release binary `src-tauri/target/release/usag8` in the ext4 copy. Startup is process start to matching X11 window appearance, not a stopwatch measurement of the first fully painted frame. At startup, CPU is transiently elevated while WebKit initializes. RSS and CPU below sum `usag8`, `WebKitNetworkProcess`, and `WebKitWebProcess`.
+
+| Run | Window visible | Startup process-tree CPU / RSS | 1 min idle CPU / RSS | 5 min idle CPU / RSS |
+|---|---:|---:|---:|---:|
+| 1 | 0.211 s | 134.1% / 232,336 KiB | 5.2% / 409,360 KiB | 1.4% / 409,388 KiB |
+| 2 | 0.212 s | 141.4% / 231,820 KiB | 1.9% / 406,792 KiB | 0.3% / 406,792 KiB |
+| 3 | 0.212 s | 170.5% / 232,500 KiB | 3.5% / 407,684 KiB | 1.1% / 407,756 KiB |
+
+| Other measure | Result |
 |---|---|
-| Tauri startup | UNTESTED — executable could not be built |
-| Idle CPU / RSS | UNTESTED — no application process |
-| WebKitGTK rendering | UNTESTED — no native window |
-| Three-run samples | 0 / 3 — blocked before launch |
-| X11 / Wayland | X11 environment identified; native behavior untested / Wayland untested |
+| Release build | PASS — release profile 1m23s; DEB bundle 2.80 MiB |
+| Native rendering | PASS — actual Cinnamon/X11 window rendered the not-connected dashboard; themes were inspected in the app settings |
+| Resize | PARTIAL — 1280×720 window rendered, but the third provider row extended below the viewport; scrolling was not verified |
+| Themes | PASS — Light, Dark and System rendered; System resolved to Dark on this session |
+| Keyboard / offline | UNTESTED — no reliable keyboard-driving or disconnected-network check was completed |
+| Runs | 3 / 3 completed, each idle for five minutes |
+| Platform | Linux Mint 22.3 Cinnamon/X11; Wayland untested |
 
 ## GTK4/libadwaita comparison
 
-Not started. The observed failure is missing development packages before the application can run, not evidence of a Tauri rendering or desktop-integration blocker. Revisit only if a reproducible application-level blocker remains after the documented prerequisites are installed.
+Not started. The earlier failure was missing development packages before the app could run, not evidence of a Tauri rendering or desktop-integration blocker. Revisit only if a reproducible application-level blocker remains after the remaining UI checks.

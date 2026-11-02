@@ -15,15 +15,18 @@ Commands: `bash scripts/doctor.sh`, `uname -m`, `node --version`, `npm --version
 | Rust / Cargo | PASS — rustc 1.99.1 (58cf8f9c3 2026-10-13) / cargo 1.99.1 (5f94df478 2026-08-27) |
 | GCC / make / curl / wget / file | PASS — all commands available |
 | OpenSSL | PASS — pkg-config reports 3.0.13 |
-| D-Bus development files | FAIL — `pkg-config` cannot find `dbus-1` |
-| WebKitGTK 4.1 | FAIL — `pkg-config` cannot find `webkit2gtk-4.1` |
-| xdo / Ayatana AppIndicator / librsvg | FAIL — `pkg-config` cannot find `xdo`, `ayatana-appindicator3`, or `librsvg-2.0` |
+| D-Bus development files | PASS — `pkg-config` reports 1.14.10 |
+| GTK 3 development files | PASS — `pkg-config` reports 3.24.41 |
+| WebKitGTK 4.1 | PASS — `pkg-config` reports 2.52.6 |
+| Ayatana AppIndicator | PASS — `ayatana-appindicator3-0.1` reports 0.5.90 |
+| librsvg | PASS — `pkg-config` reports 2.58.0 |
+| xdo | PASS — `libxdo-dev` 1:3.20160805.1-5build1 is installed; it does not provide an `xdo.pc` file, so `pkg-config --modversion xdo` is not a valid check |
 
 The distro, desktop, session, and executable checks came from `scripts/doctor.sh`; dependency details above were checked separately. User-directory paths are omitted.
 
 ## Prerequisite comparison
 
-Checked against the [Tauri Linux prerequisites](https://v2.tauri.app/start/prerequisites/) on 2026-11-02. Tauri lists WebKitGTK 4.1 and Linux build/system dependencies including OpenSSL, xdo, AppIndicator, and librsvg. The local checks confirm OpenSSL, but report WebKitGTK 4.1, xdo, AppIndicator, and librsvg missing. The Rust build also reported missing `dbus-1` development files. No packages were installed.
+Checked against the [Tauri Linux prerequisites](https://v2.tauri.app/start/prerequisites/) on 2026-11-02. The user installed the documented development packages. `pkg-config` now finds WebKitGTK 4.1, D-Bus, GTK 3, AppIndicator and librsvg. The xdo development package is installed but exposes no pkg-config module; the Tauri release build succeeds. OpenSSL remains available. No package installation was performed by the agent.
 
 ## Frontend and native checks
 
@@ -31,12 +34,18 @@ Checked against the [Tauri Linux prerequisites](https://v2.tauri.app/start/prere
 |---|---|
 | Frontend check / tests / build | PASS — `npm run check`, `npm test` (4/4), and `npm run build` in an ext4 temporary copy; the repository is on vfat, where npm cannot create `.bin` symlinks |
 | Browser smoke | PASS — Firefox headless at 1280×720 rendered all three providers as “Não conectado” with no usage values; browser-only, not a native window |
-| Rust tests / Clippy | FAIL — `libdbus-sys` cannot find `dbus-1.pc`; compilation stopped before project tests |
-| Native Tauri window | FAIL — `npm run tauri dev` stopped at the same missing `dbus-1` prerequisite; no window opened |
-| Snapshot contract | PASS by source inspection — three provider IDs, all `not_connected`, `usage: None`, `collected_at: None`; Rust assertion remains unexecuted |
-| Dark / Light / System, native resize, keyboard, close/reopen, offline, notifications | UNTESTED |
+| Rust tests | PASS — `cargo test --manifest-path src-tauri/Cargo.toml` (1 passed; no failures) |
+| Rust Clippy | PASS — `cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings` |
+| Native Tauri window | PASS — `npm run tauri dev` opened on Mint Cinnamon/X11; dashboard rendered with three providers disconnected and no usage percentages |
+| Release build | PASS — `npm run tauri build` produced `usag8_0.1.0_amd64.deb` (2.80 MiB) in the temporary ext4 copy; package was not installed |
+| Snapshot contract | PASS — Rust test confirms three `not_connected` providers, null usage and null `collected_at` |
+| Dark / Light / System | PASS — each option rendered in the native settings screen; System resolved to Dark on this session; choice is not persisted |
+| Native resize | PARTIAL — resized to 1280×720; window remained responsive, but the third provider row extended below the viewport and vertical scrolling was not verified |
+| Keyboard navigation | UNTESTED — focus can be exposed through AT-SPI, but a safe end-to-end key-navigation check was not established |
+| Window close/reopen | PASS — closing the app window exited the process; launching the release binary opened a new window |
+| Disconnected network | UNTESTED — system networking was not changed |
 | Wayland session | UNTESTED — this machine reports X11 |
 
 ## Gate
 
-**FAIL / STOP** — the required WebKitGTK 4.1 development dependency is unavailable, so a valid native Tauri build and GUI run cannot be claimed. Native build, window behavior, themes, keyboard navigation, sizing, notifications, Wayland, and performance remain **UNTESTED**. Re-run the diagnostic after dependencies are supplied, then continue Plan 01.
+**PARTIAL / DEFERRED** — native tests, Clippy, a real X11 window, release build, themes and three idle performance runs now pass. Keep ADR-0001 Deferred until keyboard navigation and viewport scrolling are verified; offline behavior and Wayland remain untested. The 1280×720 view places the third provider row below the fold.

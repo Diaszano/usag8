@@ -63,7 +63,7 @@
 - [x] **Step 1: Verify backend tests.** `cargo test --manifest-path src-tauri/Cargo.toml` and `cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings`; expected PASS.
 - [x] **Step 2: Verify a native window.** `npm run tauri dev` on the Mint desktop (not just a browser). Record whether it starts, missing libs and the actual desktop session.
 - [ ] **Step 3: Exercise empty state.** Check that `get_dashboard_snapshot` yields three unconnected providers with null usage and collectedAt; no credentials requested. If incorrect, write a failing Rust test in `src-tauri/src/providers.rs`, run targeted `cargo test`, make minimal fix, rerun.
-- [ ] **Step 4: Record GUI checks.** Test Dark/Light/System, resizing near 1280×720, keyboard navigation, window close/reopen and disconnected network. Mark each `PASS/FAIL/UNTESTED` in baseline report.
+- [x] **Step 4: Record GUI checks.** Test Dark/Light/System, resizing near 1280×720, keyboard navigation, window close/reopen and disconnected network. Mark each `PASS/FAIL/UNTESTED` in baseline report.
 - [x] **Step 5: Commit verified improvements only.** `git diff --check`; commit actual code/tests/reports as `test: verify native Tauri baseline`.
 
 ### Task 4: Performance gate and ADR
@@ -73,8 +73,8 @@
 **Interfaces:** Produces `Accepted/Rejected/Deferred` decision with evidence; downstream plans must read it.
 
 - [x] **Step 1: Define repeatable observations.** Record how to capture startup, idle RSS, CPU and loading failures using actual tools (`/usr/bin/time`, `ps`, system monitor), and measured runs (at least three when feasible). Do not invent numerical thresholds.
-- [ ] **Step 2: Measure actual Tauri run.** Execute the chosen method; log commands, versions, and measured values. Record WebKitGTK rendering and UI behavior.
-- [ ] **Step 3: Compare GTK4/libadwaita only on evidenced blocker.** Write specific alternative experiment requirements, not a speculative rewrite.
+- [x] **Step 2: Measure actual Tauri run.** Execute the chosen method; log commands, versions, and measured values. Record WebKitGTK rendering and UI behavior.
+- [x] **Step 3: Compare GTK4/libadwaita only on evidenced blocker.** No application-level blocker remains; the earlier failure was missing development packages, so no alternative experiment is warranted.
 - [x] **Step 4: Update ADR.** Record `Accepted`, `Rejected` or `Deferred`, test matrix, risks, and why; when unable to run on Mint choose **Deferred**.
 - [x] **Step 5: Validate and commit.** `git diff --check`; `git add docs/research/tauri-performance.md docs/decisions/ADR-0001-stack-evaluation.md && git commit -m "docs: decide Linux desktop stack from evidence"`.
 
