@@ -29,3 +29,9 @@ The app reads no provider credentials, performs no provider network request, and
 - `apt-get remove usag8`: PASS; binary and desktop entry removed. A sentinel at `/root/.config/usag8/keep` remained unchanged. No app-created XDG data exists in this prototype.
 - Menu launch is not testable in the headless container. Separately, launched the final packaged executable extracted from this DEB on Mint Cinnamon/X11 inside an isolated network namespace. Dashboard rendered with providers not connected; pointer hover opened the preview; Tab focused Codex and opened the same preview; Esc hid it while retaining focus; Enter opened Codex details. This was an extracted-binary smoke, not a menu launch from an installed package.
 - No app network access, system tray, provider setup, theme change, or resize was exercised in this package smoke. Theme/viewport evidence remains in `docs/qa/keyboard-and-viewports.md` and the Plan 03 ledger.
+
+## Publication gate
+
+- **INTERNAL-ONLY.** Name, domain, package namespace, and final icon provenance remain unresolved; see `branding-gate.md`.
+- Supported evidence is limited to Linux Mint 22.3 Cinnamon 6.6.9/X11. The container install used Ubuntu 24.04 packages and did not test the desktop menu or Cinnamon itself.
+- No auto-updater, telemetry, provider network access, credentials, or install/remove scripts are present. The passing internal package is not public-release approval.
