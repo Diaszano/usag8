@@ -15,3 +15,19 @@
 No candidate currently passes every gate. Do not scrape private endpoints, reuse undocumented bearer tokens, parse protected credential stores, write provider credential files, interpolate user-controlled text into shell commands, make unrequested network calls, or log credentials/raw status output. Do not invoke `agy` from usag8 unless Google clarifies that this third-party use is permitted. Do not use Cursor's team key for a personal quota display.
 
 For any future approved source, document exact fields, endpoint/command and allowed cadence first. Prefer a documented API. If a subprocess is specifically approved, invoke the fixed executable and argument vector without a shell; cap duration and output, discard stderr unless sanitized, and never include secrets in arguments or logs. These are proposed controls, not an implementation authorization.
+
+## Failure and IO contract for a future collector
+
+This is a design proposal only. There is no approved source or collector today. The existing Rust snapshot uses `not_connected` with `usage: None`; keep availability separate from whether a provider exposes a supported quota metric.
+
+| Scenario | Future result |
+|---|---|
+| Optional CLI is missing | Report source unavailable/not connected; do not install it or fail app startup. |
+| Network is offline or times out | Report source unavailable/offline; do not present a cached value as current. |
+| Permission is denied or account is signed out | Report unauthorized/not connected; do not fall back to reading credential files. |
+| Tool is present but quota is undocumented/unsupported | Keep tool availability independent; set `usage: null`. |
+| One provider errors | Preserve other provider snapshots; isolate each provider's failure. |
+
+Allowed reads must be the exact public/local interface approved by a future source-specific ADR. Current allowed reads: none. No protected credential paths, token logs, transcript/history files, writes, or polling are approved. Prefer a documented local HTTP endpoint/API over subprocess. If a fixed read-only CLI invocation is later approved, use an argument vector without a shell, with a bounded timeout and stdout/stderr size; do not pass credentials or user input and do not log raw output. Any future polling must have a documented bounded cadence and honor source rate limits; until then, perform no background polling. A provider timeout must be bounded so it cannot block the window or other providers. These behaviors require deterministic sanitized fixtures and tests in the separate implementation plan; they have not been runtime-tested.
+
+For a single approved provider, use standalone functions rather than introducing a collector trait. Revisit an interface only if a second real provider is approved and duplication exists.
