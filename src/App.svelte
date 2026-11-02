@@ -17,6 +17,7 @@
   let loading = $state(true);
   let error = $state<string | null>(null);
   let selectedId = $state("claude-code");
+  let previewId = $state<string | null>(null);
   let selectedProvider = $derived(snapshot?.providers.find(p => p.id === selectedId) ?? null);
   let recoveryCopy = $derived(selectedProvider ? getRecoveryCopy(getProviderViewState(selectedProvider)) : null);
 
@@ -34,7 +35,7 @@
     selectedId = next.selectedId;
   }
 
-  function openProvider(provider: ProviderSnapshot) { dispatchNavigation({ type: "provider", id: provider.id }); }
+  function openProvider(provider: ProviderSnapshot) { previewId = null; dispatchNavigation({ type: "provider", id: provider.id }); }
 
   onMount(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -86,11 +87,24 @@
         </section>
         <section class="panel providers" aria-labelledby="providers-title"><div class="section-head"><div><h2 id="providers-title">Assistentes</h2><p class="secondary">Clique para ver o estado individual</p></div><button class="secondary-button" onclick={refresh}>Atualizar</button></div>
           {#each snapshot.providers as provider (provider.id)}
-            <button class="provider-row" onclick={() => openProvider(provider)} aria-label={`Abrir detalhes de ${provider.displayName}`}>
-              <span class="provider-logo" aria-hidden="true">{provider.displayName.slice(0,1)}</span>
-              <span class="provider-name"><strong>{provider.displayName}</strong><small>{providerStateLabel(provider.state)}</small></span>
-              <span class="metric"><strong>{formatUsage(provider.usage)}</strong><small>{qualityLabel(provider.usage)}</small></span>
-            </button>
+            <div class="provider-item">
+              <button class="provider-row" onclick={() => openProvider(provider)} aria-label={`Abrir detalhes de ${provider.displayName}`} aria-describedby={previewId === provider.id ? `preview-${provider.id}` : undefined}
+                onpointerenter={() => previewId = provider.id}
+                onpointerleave={(event) => { if (document.activeElement !== event.currentTarget) previewId = null; }}
+                onfocus={() => previewId = provider.id}
+                onblur={(event) => { if (!event.currentTarget.matches(":hover")) previewId = null; }}
+                onkeydown={(event) => { if (event.key === "Escape") { previewId = null; event.currentTarget.focus(); event.preventDefault(); } }}>
+                <span class="provider-logo" aria-hidden="true">{provider.displayName.slice(0,1)}</span>
+                <span class="provider-name"><strong>{provider.displayName}</strong><small>{providerStateLabel(provider.state)}</small></span>
+                <span class="metric"><strong>{formatUsage(provider.usage)}</strong><small>{qualityLabel(provider.usage)}</small></span>
+              </button>
+              {#if previewId === provider.id}
+                <div class="provider-preview" id={`preview-${provider.id}`} role="tooltip">
+                  <strong>{provider.displayName}</strong>
+                  <span>{providerStateLabel(provider.state)} · {formatUsage(provider.usage)} · {qualityLabel(provider.usage)}</span>
+                </div>
+              {/if}
+            </div>
           {/each}
           <p class="footnote">Nenhum percentual é inferido sem fonte, período e horário de coleta.</p>
         </section>
