@@ -2,6 +2,8 @@
 
 **Checked:** 2026-11-02 05:37 UTC. Public official documentation only. No provider CLI was run, no account was accessed, and no local credentials or usage data were read.
 
+Policy and access findings are summarized in the [source security checklist](source-checklist.md). The checked date applies to these links as well.
+
 `Unavailable` means the checked public documentation does not expose a supported source for that data. It does not mean the provider has no usage page or quota.
 
 | Provider | Official source URL | Last checked UTC | Version | Metric | Unit | Window | Quota/reset meaning | Classification and evidence |
