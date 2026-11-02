@@ -4,12 +4,13 @@
   import { formatUsage, qualityLabel, providerStateLabel } from "./lib/format";
   import { getProviderViewState } from "./lib/provider-view";
   import { getRecoveryCopy } from "./lib/recovery-copy";
+  import { resolveTheme } from "./lib/theme";
+  import type { ThemePreference } from "./lib/theme";
   import type { DashboardSnapshot, ProviderSnapshot } from "./lib/types";
 
   type View = "dashboard" | "details" | "settings";
-  type Theme = "system" | "dark" | "light";
   let view = $state<View>("dashboard");
-  let theme = $state<Theme>("system");
+  let theme = $state<ThemePreference>("system");
   let resolvedTheme = $state<"dark" | "light">("dark");
   let snapshot = $state<DashboardSnapshot | null>(null);
   let loading = $state(true);
@@ -31,7 +32,7 @@
   onMount(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const syncTheme = () => {
-      resolvedTheme = theme === "system" ? (media.matches ? "dark" : "light") : theme;
+      resolvedTheme = resolveTheme(theme, media.matches);
     };
     const listener = () => syncTheme();
     media.addEventListener("change", listener);
@@ -42,10 +43,7 @@
 
   $effect(() => {
     if (typeof window === "undefined") return;
-    const mode = theme;
-    resolvedTheme = mode === "system"
-      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-      : mode;
+    resolvedTheme = resolveTheme(theme, window.matchMedia("(prefers-color-scheme: dark)").matches);
   });
 </script>
 
@@ -97,7 +95,7 @@
           </section>
         {:else}<p class="secondary">Nenhum provedor selecionado.</p>{/if}
       {:else}
-        <section class="panel settings"><h2>Aparência</h2><label for="theme">Tema do aplicativo</label><select id="theme" value={theme} onchange={(event) => theme = event.currentTarget.value as Theme}><option value="system">Sistema</option><option value="light">Light</option><option value="dark">Dark</option></select><p class="footnote">A preferência ainda não é salva. Bandeja, overlay e atalhos globais não foram implementados.</p></section>
+        <section class="panel settings"><h2>Aparência</h2><label for="theme">Tema do aplicativo</label><select id="theme" value={theme} onchange={(event) => theme = event.currentTarget.value as ThemePreference}><option value="system">Sistema</option><option value="light">Light</option><option value="dark">Dark</option></select><p class="footnote">A preferência ainda não é salva. Bandeja, overlay e atalhos globais não foram implementados.</p></section>
       {/if}
     </main>
   </div>
