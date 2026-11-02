@@ -6,9 +6,10 @@
   import { getRecoveryCopy } from "./lib/recovery-copy";
   import { resolveTheme } from "./lib/theme";
   import type { ThemePreference } from "./lib/theme";
+  import { navigate } from "./lib/navigation";
+  import type { NavigationAction, View } from "./lib/navigation";
   import type { DashboardSnapshot, ProviderSnapshot } from "./lib/types";
 
-  type View = "dashboard" | "details" | "settings";
   let view = $state<View>("dashboard");
   let theme = $state<ThemePreference>("system");
   let resolvedTheme = $state<"dark" | "light">("dark");
@@ -27,7 +28,13 @@
     finally { loading = false; }
   }
 
-  function openProvider(provider: ProviderSnapshot) { selectedId = provider.id; view = "details"; }
+  function dispatchNavigation(action: NavigationAction) {
+    const next = navigate({ view, selectedId }, action);
+    view = next.view;
+    selectedId = next.selectedId;
+  }
+
+  function openProvider(provider: ProviderSnapshot) { dispatchNavigation({ type: "provider", id: provider.id }); }
 
   onMount(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -53,9 +60,9 @@
     <div class="brand"><span class="brand-mark" aria-hidden="true">8</span><strong>usag8</strong></div>
     <p class="nav-label">ESPAÇO DE TRABALHO</p>
     <nav class="nav-items" aria-label="Páginas">
-      <button class:active={view === "dashboard"} aria-current={view === "dashboard" ? "page" : undefined} onclick={() => view = "dashboard"}><span aria-hidden="true">◫</span><span class="nav-text">Visão geral</span></button>
-      <button class:active={view === "details"} aria-current={view === "details" ? "page" : undefined} onclick={() => view = "details"}><span aria-hidden="true">◈</span><span class="nav-text">Assistentes</span></button>
-      <button class:active={view === "settings"} aria-current={view === "settings" ? "page" : undefined} onclick={() => view = "settings"}><span aria-hidden="true">⚙</span><span class="nav-text">Configurações</span></button>
+      <button class:active={view === "dashboard"} aria-label="Visão geral" title="Visão geral" aria-current={view === "dashboard" ? "page" : undefined} onclick={() => dispatchNavigation({ type: "dashboard" })}><span aria-hidden="true">◫</span><span class="nav-text">Visão geral</span></button>
+      <button class:active={view === "details"} aria-label="Assistentes" title="Assistentes" aria-current={view === "details" ? "page" : undefined} onclick={() => dispatchNavigation({ type: "provider", id: selectedId })}><span aria-hidden="true">◈</span><span class="nav-text">Assistentes</span></button>
+      <button class:active={view === "settings"} aria-label="Configurações" title="Configurações" aria-current={view === "settings" ? "page" : undefined} onclick={() => dispatchNavigation({ type: "settings" })}><span aria-hidden="true">⚙</span><span class="nav-text">Configurações</span></button>
     </nav>
     <div class="privacy"><span class="status-dot" aria-hidden="true"></span><strong>Privacidade local</strong><p>Nenhum dado de credenciais é acessado nesta prévia.</p></div>
   </aside>
