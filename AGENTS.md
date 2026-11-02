@@ -28,10 +28,10 @@ Use these project instructions **together with the installed obra/superpowers sk
 - No mixed incompatible metrics; no invented times/limits.
 
 ## Scope now
-Implement a real Tauri window and a reliable 'not connected' state. Next evaluate one provider with a legal, stable, authorized source. Defer SQLite, history, alerts, panel text and floating global sidebar.
+The real Tauri window and reliable 'not connected' state are implemented. Plan 07 revalidated sources and found no approved provider path; keep providers disconnected. Reconsider provider work only when a legal, stable, authorized source is established and the user approves a source-specific plan. Defer SQLite, history, alerts, panel text and floating global sidebar.
 
 ## Plan queue (2026-11-02)
 - Read `docs/superpowers/README.md` and relevant `docs/superpowers/specs/*.md` before implementing a `docs/superpowers/plans/*.md` plan.
-- **Plan 01 is first.** Plans 02–06 are proposals; adhere to their explicit acceptance gates.
+- Plans 01–06 are complete within their recorded gates. Plan 07 is completed as research-only with NO-GO for provider integration; do not treat completion of research as source or collector approval.
 - Plan 04 is research-only: do not implement a collector before approved source-specific documentation/ADR and follow-up plan.
 - The historical `docs/plans/2026-11-01-mvp-validation.md` must not override the new spec-backed plans.
