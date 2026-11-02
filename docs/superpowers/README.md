@@ -1,6 +1,6 @@
 # Usag8 — Superpowers work queue (2026-11-02)
 
-**Status:** Plans 01–06 are complete within their documented gates. Plan 01 is accepted for Linux Mint Cinnamon/X11; Plan 04 is NO-GO for a provider collector; Plan 05 native surfaces are deferred; Plan 06 is internal-only. Remaining untested items and release blockers are recorded in each plan report.
+**Status:** Plans 01–05 are complete within their gates. Plan 01 is accepted for Linux Mint Cinnamon/X11; Plan 04 is NO-GO for a provider collector; Plan 05 native surfaces are deferred. Plan 06's internal DEB is built and container-smoke-tested; installed-package launch from the Mint Cinnamon menu remains pending a disposable Mint VM or explicit approval to install/remove it on the personal host. Public release remains blocked by the branding gate.
 
 ## How to use
 
@@ -19,9 +19,9 @@
 | 03 | [Penpot UI, navigation & A11y](plans/2026-11-02-03-penpot-ui-and-accessibility.md) | [Spec](specs/2026-11-02-penpot-ui-design.md) | After 01 Accepted; 02 contract first | Complete — documented QA gaps remain |
 | 04 | [First provider feasibility](plans/2026-11-02-04-provider-source-feasibility.md) | [Spec](specs/2026-11-02-provider-feasibility-design.md) | Research only; no connector until source ADR/user approval | Complete — NO-GO for current scope |
 | 05 | [Quick View & Linux surface evaluation](plans/2026-11-02-05-quick-view-and-linux-surfaces.md) | [Spec](specs/2026-11-02-linux-surfaces-design.md) | In-app after 03; native experiments separately approved | Complete — in-app; native integrations deferred |
-| 06 | [Internal DEB & QA](plans/2026-11-02-06-deb-package-and-qa.md) | [Spec](specs/2026-11-02-deb-release-design.md) | After 01 Accepted + stable UI and tests | Complete — internal-only; Mint menu install untested |
+| 06 | [Internal DEB & QA](plans/2026-11-02-06-deb-package-and-qa.md) | [Spec](specs/2026-11-02-deb-release-design.md) | After 01 Accepted + stable UI and tests | Partial — final Mint installed-menu smoke pending |
 
-Plans 02 and 04 contain independent strands: source research may happen in parallel with pure frontend work, **but no provider-collection code** until 04 approves a specific source. Plan 05 native desktop integrations and Plan 06 public release remain gated; in-app Quick View and the internal package are complete.
+Plans 02 and 04 contain independent strands: source research may happen in parallel with pure frontend work, **but no provider-collection code** until 04 approves a specific source. Plan 05 native desktop integrations and Plan 06 installed-menu smoke/public release remain gated; in-app Quick View and the internal DEB build are complete.
 
 ## What remains intentionally unplanned
 

@@ -10,8 +10,10 @@ Run against the native Linux Mint Cinnamon/X11 build. Record `PASS`, `FAIL`, or 
 | Focus a provider row with Tab | The same provider preview shown on hover appears; focus stays on the row. | PASS on packaged binary, Cinnamon/X11, 2026-11-02 |
 | Activate a focused provider with Enter or Space | Open that provider's details. | Enter PASS on packaged binary; Space native runtime UNTESTED |
 | Press Esc while a provider preview is open | Dismiss the preview and keep focus on its provider row. | PASS on packaged binary; focus outline remained on trigger |
+| Press Esc after hover opened preview while focus is elsewhere | Dismiss preview and move focus back to the hovered row. | PASS on packaged binary, Cinnamon/X11 |
 | Move pointer over a provider row | Show the same preview as keyboard focus. | PASS on packaged binary, Cinnamon/X11 |
-| Move pointer from a provider row into its preview | Preview stays visible while the pointer remains inside the row-and-preview group. | UNTESTED at runtime; implementation and Svelte checks pass |
+| Move pointer from a provider row into its preview | Preview stays visible while the pointer remains inside the row-and-preview group. | PASS on packaged binary, Cinnamon/X11 |
+| Leave the provider row and preview group | Close the transient preview. | PASS on packaged binary after review fix |
 | Focus a provider with an unavailable metric or generic error state | Show `—`, unavailable quality, and generic state; never expose raw error text. | Null/error mapper unit test PASS; generic not-connected preview PASS on packaged binary |
 | Activate a provider row on a pointer with no hover | Open provider details; the preview is not required to use the app. | Keyboard Enter path PASS; no-hover hardware UNTESTED |
 | Use touch or another pointer without hover | Provider details remain available by activating the row; no hover is required. | UNTESTED |

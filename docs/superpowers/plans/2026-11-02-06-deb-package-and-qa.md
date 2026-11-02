@@ -1,6 +1,6 @@
 # Internal DEB Package and Linux QA Implementation Plan
 
-**Execution status:** Complete for an internal-only DEB. Container install/remove and extracted-binary Mint/X11 smoke passed; installed-package Cinnamon menu launch and public branding clearance remain `UNTESTED`/unresolved.
+**Execution status:** Partial. The internal DEB build, metadata inspection, container install/remove, and extracted-binary Mint/X11 smoke passed. Installed-package Cinnamon menu launch remains pending a disposable Mint VM or explicit approval to install/remove the package on the personal host. Public branding clearance is unresolved and the artifact remains internal-only.
 
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` (recommended) or `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkboxes for tracking.
@@ -60,8 +60,9 @@
 
 **Interfaces:** Tested commands and observations, no hidden installer; manual user approval before installation on personal machine.
 
-- [x] **Step 1: Select disposable system.** Mint Cinnamon VM/test account matching supported release; explicitly approve any `sudo` action before executing.
-- [x] **Step 2: Install locally.** `sudo apt install ./<verified-file.deb>` in test environment; launch via desktop menu and note missing libraries/permissions.
+- [x] **Step 1: Select disposable system.** Used ephemeral Ubuntu 24.04 container matching Noble dependencies; no Mint VM was available. Explicit approval is still required before any `sudo` action on the personal host.
+- [x] **Step 2: Install package.** Installed the verified DEB in the container; `/usr/bin/usag8`, desktop entry, and runtime libraries were present.
+- [ ] **Step 2b: Launch the installed package from the Cinnamon menu.** `UNTESTED`: the container is headless and not Cinnamon; personal-host installation requires explicit approval, or use a disposable Mint VM.
 - [x] **Step 3: Validate fallback.** Launch offline and with no system tray/providers; check that UI still shows unavailable (not fabricated usage), Dark/Light, keyboard and window resize.
 - [x] **Step 4: Uninstall.** `sudo apt remove <actual-package-name>`; verify app binary/menu entry removed and user data not silently deleted. Record exact installed package name from metadata.
 - [x] **Step 5: Commit evidence.** `git add docs/release/deb-qa.md && git commit -m "test: record DEB install and removal smoke"`.

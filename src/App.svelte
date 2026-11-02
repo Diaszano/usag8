@@ -19,6 +19,7 @@
   let error = $state<string | null>(null);
   let selectedId = $state("claude-code");
   let previewId = $state<string | null>(null);
+  let previewTrigger: HTMLButtonElement | null = null;
   let selectedProvider = $derived(snapshot?.providers.find(p => p.id === selectedId) ?? null);
   let recoveryCopy = $derived(selectedProvider ? getRecoveryCopy(getProviderViewState(selectedProvider)) : null);
 
@@ -36,7 +37,20 @@
     selectedId = next.selectedId;
   }
 
-  function openProvider(provider: ProviderSnapshot) { previewId = null; dispatchNavigation({ type: "provider", id: provider.id }); }
+  function openProvider(provider: ProviderSnapshot) { previewId = null; previewTrigger = null; dispatchNavigation({ type: "provider", id: provider.id }); }
+
+  $effect(() => {
+    if (!previewId) return;
+    const dismissPreview = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        previewTrigger?.focus();
+        previewTrigger = null;
+        previewId = null;
+      }
+    };
+    window.addEventListener("keydown", dismissPreview);
+    return () => window.removeEventListener("keydown", dismissPreview);
+  });
 
   onMount(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -89,24 +103,21 @@
         <section class="panel providers" aria-labelledby="providers-title"><div class="section-head"><div><h2 id="providers-title">Assistentes</h2><p class="secondary">Clique para ver o estado individual</p></div><button class="secondary-button" onclick={refresh}>Atualizar</button></div>
           {#each snapshot.providers as provider (provider.id)}
             {@const compact = toCompactProviderLabel(provider)}
-            <div class="provider-item">
-              <button class="provider-row" onclick={() => openProvider(provider)} aria-label={`Abrir detalhes de ${provider.displayName}`} aria-describedby={previewId === provider.id ? `preview-${provider.id}` : undefined}
-                onpointerenter={() => previewId = provider.id}
-                onpointerleave={(event) => { if (document.activeElement !== event.currentTarget && !event.currentTarget.parentElement?.contains(event.relatedTarget as Node | null)) previewId = null; }}
-                onfocus={() => previewId = provider.id}
-                onblur={(event) => { if (!event.currentTarget.parentElement?.matches(":hover")) previewId = null; }}
-                onkeydown={(event) => { if (event.key === "Escape") { previewId = null; event.currentTarget.focus(); event.preventDefault(); } }}>
+            <button class="provider-row" onclick={() => openProvider(provider)} aria-label={`Abrir detalhes de ${provider.displayName}`} aria-describedby={previewId === provider.id ? `preview-${provider.id}` : undefined}
+              onpointerenter={(event) => { previewTrigger = event.currentTarget; previewId = provider.id; }}
+              onpointerleave={(event) => { if (document.activeElement !== event.currentTarget) { previewTrigger = null; previewId = null; } }}
+              onfocus={(event) => { previewTrigger = event.currentTarget; previewId = provider.id; }}
+              onblur={(event) => { if (!event.currentTarget.matches(":hover")) { previewTrigger = null; previewId = null; } }}>
                 <span class="provider-logo" aria-hidden="true">{provider.displayName.slice(0,1)}</span>
                 <span class="provider-name"><strong>{provider.displayName}</strong><small>{providerStateLabel(provider.state)}</small></span>
                 <span class="metric"><strong>{formatUsage(provider.usage)}</strong><small>{qualityLabel(provider.usage)}</small></span>
-              </button>
               {#if previewId === provider.id}
-                <div class="provider-preview" id={`preview-${provider.id}`} role="tooltip">
+                <span class="provider-preview" id={`preview-${provider.id}`} role="tooltip">
                   <strong>{compact.name}</strong>
                   <span>{compact.stateLabel} · {compact.usageLabel} · {compact.qualityLabel}</span>
-                </div>
+                </span>
               {/if}
-            </div>
+            </button>
           {/each}
           <p class="footnote">Nenhum percentual é inferido sem fonte, período e horário de coleta.</p>
         </section>
