@@ -16,4 +16,14 @@ describe("navigate", () => {
     expect(navigate({ view: "details", selectedId: "codex" }, { type: "dashboard" }))
       .toEqual({ view: "dashboard", selectedId: "codex" });
   });
+
+  it("opens Quick View for the selected provider", () => {
+    expect(navigate({ view: "details", selectedId: "codex" }, { type: "quick-view" }))
+      .toEqual({ view: "quick-view", selectedId: "codex" });
+  });
+
+  it("does not navigate to a provider id outside the supported set", () => {
+    const current = { view: "dashboard" as const, selectedId: "claude-code" };
+    expect(navigate(current, { type: "provider", id: "unseen-provider" })).toEqual(current);
+  });
 });

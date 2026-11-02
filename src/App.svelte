@@ -61,16 +61,16 @@
     <p class="nav-label">ESPAÇO DE TRABALHO</p>
     <nav class="nav-items" aria-label="Páginas">
       <button class:active={view === "dashboard"} aria-label="Visão geral" title="Visão geral" aria-current={view === "dashboard" ? "page" : undefined} onclick={() => dispatchNavigation({ type: "dashboard" })}><span aria-hidden="true">◫</span><span class="nav-text">Visão geral</span></button>
-      <button class:active={view === "details"} aria-label="Assistentes" title="Assistentes" aria-current={view === "details" ? "page" : undefined} onclick={() => dispatchNavigation({ type: "provider", id: selectedId })}><span aria-hidden="true">◈</span><span class="nav-text">Assistentes</span></button>
+      <button class:active={view === "details" || view === "quick-view"} aria-label="Assistentes" title="Assistentes" aria-current={view === "details" || view === "quick-view" ? "page" : undefined} onclick={() => dispatchNavigation({ type: "provider", id: selectedId })}><span aria-hidden="true">◈</span><span class="nav-text">Assistentes</span></button>
       <button class:active={view === "settings"} aria-label="Configurações" title="Configurações" aria-current={view === "settings" ? "page" : undefined} onclick={() => dispatchNavigation({ type: "settings" })}><span aria-hidden="true">⚙</span><span class="nav-text">Configurações</span></button>
     </nav>
     <div class="privacy"><span class="status-dot" aria-hidden="true"></span><strong>Privacidade local</strong><p>Nenhum dado de credenciais é acessado nesta prévia.</p></div>
   </aside>
 
   <div class="workspace">
-    <header class="topbar"><span>usag8 / {view === "dashboard" ? "Visão geral" : view === "details" ? "Assistentes" : "Configurações"}</span><span class="mode-tag">{resolvedTheme === "dark" ? "Dark" : "Light"}</span></header>
+    <header class="topbar"><span>usag8 / {view === "dashboard" ? "Visão geral" : view === "details" ? "Assistentes" : view === "quick-view" ? "Visão rápida" : "Configurações"}</span><span class="mode-tag">{resolvedTheme === "dark" ? "Dark" : "Light"}</span></header>
     <main id="main-content">
-      <div class="page-heading"><p class="eyebrow">{view === "dashboard" ? "VISÃO GERAL" : view === "details" ? "DETALHES" : "PREFERÊNCIAS"}</p><h1>{view === "dashboard" ? "Seu uso de IA, em perspectiva." : view === "details" ? (selectedProvider?.displayName ?? "Assistentes") : "Configurações"}</h1><p class="secondary">{view === "dashboard" ? "Informações por ferramenta, sem combinar limites incompatíveis." : view === "details" ? "Origem, período e confiabilidade das informações." : "Preferências do aplicativo durante o protótipo."}</p></div>
+      <div class="page-heading"><p class="eyebrow">{view === "dashboard" ? "VISÃO GERAL" : view === "details" ? "DETALHES" : view === "quick-view" ? "VISÃO RÁPIDA" : "PREFERÊNCIAS"}</p><h1>{view === "dashboard" ? "Seu uso de IA, em perspectiva." : view === "details" || view === "quick-view" ? (selectedProvider?.displayName ?? "Assistentes") : "Configurações"}</h1><p class="secondary">{view === "dashboard" ? "Informações por ferramenta, sem combinar limites incompatíveis." : view === "details" ? "Origem, período e confiabilidade das informações." : view === "quick-view" ? "Resumo compacto do estado deste provedor." : "Preferências do aplicativo durante o protótipo."}</p></div>
       <div class="demo-notice">PROTÓTIPO · SEM COLETA</div>
 
       {#if error}<div class="error-banner" role="alert">{error}<button onclick={refresh}>Tentar novamente</button></div>{/if}
@@ -97,8 +97,19 @@
       {:else if view === "details"}
         {#if selectedProvider}
           <section class="details-grid">
-            <div class="panel"><h2>{selectedProvider.displayName}</h2><p class="secondary">{providerStateLabel(selectedProvider.state)}</p><div role="status"><h2>{recoveryCopy?.title}</h2><p class="secondary">{recoveryCopy?.description}</p>{#if recoveryCopy?.action}<button class="secondary-button" onclick={refresh} disabled={loading}>{recoveryCopy.action}</button>{/if}</div><div class="empty-state"><strong>{formatUsage(selectedProvider.usage)}</strong><span>{qualityLabel(selectedProvider.usage)}</span></div><p class="secondary">{selectedProvider.usage?.period ?? "Período: indisponível"}</p><button class="secondary-button" onclick={() => view = "dashboard"}>Voltar ao dashboard</button></div>
+            <div class="panel"><h2>{selectedProvider.displayName}</h2><p class="secondary">{providerStateLabel(selectedProvider.state)}</p><div role="status"><h2>{recoveryCopy?.title}</h2><p class="secondary">{recoveryCopy?.description}</p>{#if recoveryCopy?.action}<button class="secondary-button" onclick={refresh} disabled={loading}>{recoveryCopy.action}</button>{/if}</div><div class="empty-state"><strong>{formatUsage(selectedProvider.usage)}</strong><span>{qualityLabel(selectedProvider.usage)}</span></div><p class="secondary">{selectedProvider.usage?.period ?? "Período: indisponível"}</p><div class="quick-view-actions"><button class="secondary-button" onclick={() => dispatchNavigation({ type: "quick-view" })}>Visão rápida</button><button class="secondary-button" onclick={() => dispatchNavigation({ type: "dashboard" })}>Voltar ao dashboard</button></div></div>
             <div class="panel"><h2>Origem e atualização</h2><p>Fonte: {selectedProvider.usage?.source ?? "não conectada"}</p><p>Atualização: {selectedProvider.usage?.updatedAt ?? "— sem coleta"}</p><p class="footnote">Indisponível não significa 0%.</p></div>
+          </section>
+        {:else}<p class="secondary">Nenhum provedor selecionado.</p>{/if}
+      {:else if view === "quick-view"}
+        {#if selectedProvider}
+          <section class="panel quick-view" aria-label={`Visão rápida de ${selectedProvider.displayName}`}>
+            <p class="eyebrow">ESTADO DO PROVEDOR</p>
+            <h2>{selectedProvider.displayName}</h2>
+            <p class="secondary">{providerStateLabel(selectedProvider.state)}</p>
+            <div class="empty-state"><strong>{formatUsage(selectedProvider.usage)}</strong><span>{qualityLabel(selectedProvider.usage)}</span></div>
+            <p class="secondary">{selectedProvider.usage?.period ?? "Período: indisponível"}</p>
+            <div class="quick-view-actions"><button class="secondary-button" onclick={() => dispatchNavigation({ type: "provider", id: selectedProvider.id })}>Abrir detalhes</button><button class="secondary-button" onclick={() => dispatchNavigation({ type: "dashboard" })}>Voltar ao painel</button></div>
           </section>
         {:else}<p class="secondary">Nenhum provedor selecionado.</p>{/if}
       {:else}
