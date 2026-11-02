@@ -28,7 +28,7 @@ The app reads no provider credentials, performs no provider network request, and
 - `apt-get install --no-install-recommends /tmp/usag8.deb`: PASS; package version `0.1.0` installed, `/usr/bin/usag8` and `/usr/share/applications/usag8.desktop` present, `ldd` reported no missing libraries.
 - `apt-get remove usag8`: PASS; binary and desktop entry removed. A sentinel at `/root/.config/usag8/keep` remained unchanged. No app-created XDG data exists in this prototype.
 - Menu launch is not testable in the headless container. Separately, launched the final packaged executable extracted from this DEB on Mint Cinnamon/X11 inside an isolated network namespace. Dashboard rendered with providers not connected; pointer hover opened the preview; Tab focused Codex and opened the same preview; Esc hid it while retaining focus; Enter opened Codex details. This was an extracted-binary smoke, not a menu launch from an installed package.
-- No app network access, system tray, provider setup, theme change, or resize was exercised in this package smoke. Theme/viewport evidence remains in `docs/qa/keyboard-and-viewports.md` and the Plan 03 ledger.
+- No app network access was available during the extracted-binary smoke; no system tray or provider setup was used. Theme changes and window resizing were not rechecked in this package smoke; theme/viewport evidence and remaining gaps are in `docs/qa/keyboard-and-viewports.md` and the Plan 03 ledger.
 
 ## Publication gate
 

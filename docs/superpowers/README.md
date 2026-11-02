@@ -1,6 +1,6 @@
 # Usag8 — Superpowers work queue (2026-11-02)
 
-**Status:** Execution is in progress. Plan 01 is Accepted for Linux Mint Cinnamon/X11. Plan 04's research is complete with a NO-GO decision; no provider connection or real quota is approved.
+**Status:** Plans 01–06 are complete within their documented gates. Plan 01 is accepted for Linux Mint Cinnamon/X11; Plan 04 is NO-GO for a provider collector; Plan 05 native surfaces are deferred; Plan 06 is internal-only. Remaining untested items and release blockers are recorded in each plan report.
 
 ## How to use
 
@@ -15,13 +15,13 @@
 | Order | Plan | Spec | Gate | Status |
 |---|---|---|---|---|
 | 01 | [Linux stack validation](plans/2026-11-02-01-linux-stack-spike.md) | [Spec](specs/2026-11-02-linux-spike-design.md) | First; run on user's Mint Cinnamon | Complete — accepted for Mint Cinnamon/X11; Wayland untested |
-| 02 | [Snapshot integrity & recovery](plans/2026-11-02-02-snapshot-integrity.md) | [Spec](specs/2026-11-02-snapshot-and-states-design.md) | After 01 Accepted | Ready |
-| 03 | [Penpot UI, navigation & A11y](plans/2026-11-02-03-penpot-ui-and-accessibility.md) | [Spec](specs/2026-11-02-penpot-ui-design.md) | After 01 Accepted; 02 contract first | Proposed |
+| 02 | [Snapshot integrity & recovery](plans/2026-11-02-02-snapshot-integrity.md) | [Spec](specs/2026-11-02-snapshot-and-states-design.md) | After 01 Accepted | Complete |
+| 03 | [Penpot UI, navigation & A11y](plans/2026-11-02-03-penpot-ui-and-accessibility.md) | [Spec](specs/2026-11-02-penpot-ui-design.md) | After 01 Accepted; 02 contract first | Complete — documented QA gaps remain |
 | 04 | [First provider feasibility](plans/2026-11-02-04-provider-source-feasibility.md) | [Spec](specs/2026-11-02-provider-feasibility-design.md) | Research only; no connector until source ADR/user approval | Complete — NO-GO for current scope |
-| 05 | [Quick View & Linux surface evaluation](plans/2026-11-02-05-quick-view-and-linux-surfaces.md) | [Spec](specs/2026-11-02-linux-surfaces-design.md) | In-app after 03; native experiments separately approved | Proposed |
-| 06 | [Internal DEB & QA](plans/2026-11-02-06-deb-package-and-qa.md) | [Spec](specs/2026-11-02-deb-release-design.md) | After 01 Accepted + stable UI and tests | Proposed |
+| 05 | [Quick View & Linux surface evaluation](plans/2026-11-02-05-quick-view-and-linux-surfaces.md) | [Spec](specs/2026-11-02-linux-surfaces-design.md) | In-app after 03; native experiments separately approved | Complete — in-app; native integrations deferred |
+| 06 | [Internal DEB & QA](plans/2026-11-02-06-deb-package-and-qa.md) | [Spec](specs/2026-11-02-deb-release-design.md) | After 01 Accepted + stable UI and tests | Complete — internal-only; Mint menu install untested |
 
-Plans 02 and 04 contain independent strands: source research may happen in parallel with pure frontend work, **but no provider-collection code** until 04 approves a specific source. Plans 05 and 06 are deliberately gated, not part of the initial MVP.
+Plans 02 and 04 contain independent strands: source research may happen in parallel with pure frontend work, **but no provider-collection code** until 04 approves a specific source. Plan 05 native desktop integrations and Plan 06 public release remain gated; in-app Quick View and the internal package are complete.
 
 ## What remains intentionally unplanned
 
@@ -30,7 +30,7 @@ Plans 02 and 04 contain independent strands: source research may happen in paral
 - **Global floating sidebar, system panel text, hotkeys**: compositor/desktop spike and user approval before implementation.
 - **Public branding/release**: trademark/name/identifier and logo-rights checks before distribution.
 
-## Start here (paste into your agent)
+## Original start prompt (historical; Plan 01 is complete)
 
 > Read `AGENTS.md`, `docs/superpowers/README.md`, `docs/superpowers/specs/2026-11-02-linux-spike-design.md`, and `docs/superpowers/plans/2026-11-02-01-linux-stack-spike.md`. Inspect the actual repository state. Apply the appropriate Superpowers skills and propose an isolated worktree. Execute **only Plan 01** on my Linux Mint Cinnamon machine; record real test results and do not access providers or credentials. Stop at missing dependencies or unapproved privileged changes.
 
