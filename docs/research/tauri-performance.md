@@ -2,7 +2,7 @@
 
 ## Status
 
-**MEASURED / DECISION DEFERRED.** Three release-window runs completed on Mint Cinnamon/X11. No numeric acceptance thresholds have been approved, and keyboard navigation plus vertical scrolling at 1280×720 remain unverified.
+**MEASURED / DECISION DEFERRED.** Three release-window runs completed on Mint Cinnamon/X11. Keyboard navigation passes; no numeric acceptance thresholds have been approved, and vertical scrolling at 1280×720 remains unverified.
 
 ## Environment and blocker
 
@@ -37,7 +37,8 @@ All runs used the release binary `src-tauri/target/release/usag8` in the ext4 co
 | Native rendering | PASS — actual Cinnamon/X11 window rendered the not-connected dashboard; themes were inspected in the app settings |
 | Resize | PARTIAL — 1280×720 window rendered, but the third provider row extended below the viewport; scrolling was not verified |
 | Themes | PASS — Light, Dark and System rendered; System resolved to Dark on this session |
-| Keyboard / offline | UNTESTED — no reliable keyboard-driving or disconnected-network check was completed |
+| Keyboard | PASS — Tab moved focus through overview, assistants and settings; Enter opened settings |
+| Offline | UNTESTED — system networking was not changed |
 | Runs | 3 / 3 completed, each idle for five minutes |
 | Platform | Linux Mint 22.3 Cinnamon/X11; Wayland untested |
 

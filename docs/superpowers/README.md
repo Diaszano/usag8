@@ -1,6 +1,6 @@
 # Usag8 — Superpowers work queue (2026-11-02)
 
-**Status:** Execution is in progress. Plan 01's native validation is blocked by missing system development packages and ADR-0001 is Deferred. Plan 04's research is complete with a NO-GO decision; no provider connection or real quota is approved.
+**Status:** Execution is in progress. Plan 01's native build/window and keyboard checks pass; 1280×720 scrolling remains unresolved and ADR-0001 is Deferred. Plan 04's research is complete with a NO-GO decision; no provider connection or real quota is approved.
 
 ## How to use
 
@@ -14,7 +14,7 @@
 
 | Order | Plan | Spec | Gate | Status |
 |---|---|---|---|---|
-| 01 | [Linux stack validation](plans/2026-11-02-01-linux-stack-spike.md) | [Spec](specs/2026-11-02-linux-spike-design.md) | First; run on user's Mint Cinnamon | Incomplete — native build/window and performance pass; keyboard/scroll gates pending; ADR Deferred |
+| 01 | [Linux stack validation](plans/2026-11-02-01-linux-stack-spike.md) | [Spec](specs/2026-11-02-linux-spike-design.md) | First; run on user's Mint Cinnamon | Incomplete — native build/window, performance and keyboard pass; 1280×720 scroll and offline checks pending; ADR Deferred |
 | 02 | [Snapshot integrity & recovery](plans/2026-11-02-02-snapshot-integrity.md) | [Spec](specs/2026-11-02-snapshot-and-states-design.md) | After 01 Accepted | Proposed |
 | 03 | [Penpot UI, navigation & A11y](plans/2026-11-02-03-penpot-ui-and-accessibility.md) | [Spec](specs/2026-11-02-penpot-ui-design.md) | After 01 Accepted; 02 contract first | Proposed |
 | 04 | [First provider feasibility](plans/2026-11-02-04-provider-source-feasibility.md) | [Spec](specs/2026-11-02-provider-feasibility-design.md) | Research only; no connector until source ADR/user approval | Complete — NO-GO for current scope |

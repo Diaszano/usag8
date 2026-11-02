@@ -20,7 +20,7 @@ Commands: `bash scripts/doctor.sh`, `uname -m`, `node --version`, `npm --version
 | WebKitGTK 4.1 | PASS — `pkg-config` reports 2.52.6 |
 | Ayatana AppIndicator | PASS — `ayatana-appindicator3-0.1` reports 0.5.90 |
 | librsvg | PASS — `pkg-config` reports 2.58.0 |
-| xdo | PASS — `libxdo-dev` 1:3.20160805.1-5build1 is installed; it does not provide an `xdo.pc` file, so `pkg-config --modversion xdo` is not a valid check |
+| xdo | PASS — `libxdo-dev` 1:3.20160805.1-5build1 is installed and provides `/usr/include/xdo.h`; it does not provide an `xdo.pc` file, so `pkg-config --modversion xdo` is not a valid check |
 
 The distro, desktop, session, and executable checks came from `scripts/doctor.sh`; dependency details above were checked separately. User-directory paths are omitted.
 
@@ -41,11 +41,11 @@ Checked against the [Tauri Linux prerequisites](https://v2.tauri.app/start/prere
 | Snapshot contract | PASS — Rust test confirms three `not_connected` providers, null usage and null `collected_at` |
 | Dark / Light / System | PASS — each option rendered in the native settings screen; System resolved to Dark on this session; choice is not persisted |
 | Native resize | PARTIAL — resized to 1280×720; window remained responsive, but the third provider row extended below the viewport and vertical scrolling was not verified |
-| Keyboard navigation | UNTESTED — focus can be exposed through AT-SPI, but a safe end-to-end key-navigation check was not established |
+| Keyboard navigation | PASS — Tab moved focus from “Visão geral” to “Assistentes” and then “Configurações”; Enter opened settings |
 | Window close/reopen | PASS — closing the app window exited the process; launching the release binary opened a new window |
 | Disconnected network | UNTESTED — system networking was not changed |
 | Wayland session | UNTESTED — this machine reports X11 |
 
 ## Gate
 
-**PARTIAL / DEFERRED** — native tests, Clippy, a real X11 window, release build, themes and three idle performance runs now pass. Keep ADR-0001 Deferred until keyboard navigation and viewport scrolling are verified; offline behavior and Wayland remain untested. The 1280×720 view places the third provider row below the fold.
+**PARTIAL / DEFERRED** — native tests, Clippy, a real X11 window, release build, themes, keyboard navigation and three idle performance runs now pass. Keep ADR-0001 Deferred until scrolling at the 1280×720 viewport is verified; offline behavior and Wayland remain untested. The third provider row extends below the fold.
