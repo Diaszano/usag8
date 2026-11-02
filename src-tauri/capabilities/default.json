@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Minimal commands for the Usag8 main window",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}
