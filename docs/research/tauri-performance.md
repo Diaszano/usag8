@@ -2,7 +2,7 @@
 
 ## Status
 
-**MEASURED / DECISION DEFERRED.** Three release-window runs completed on Mint Cinnamon/X11. Keyboard navigation passes; no numeric acceptance thresholds have been approved, and vertical scrolling at 1280×720 remains unverified.
+**MEASURED / ACCEPTED for Mint Cinnamon/X11.** Three release-window runs completed. Keyboard navigation, 1280×720 scrolling and an isolated offline launch pass. No numeric performance thresholds were specified, so the measurements are reported as a baseline rather than a numerical pass/fail claim.
 
 ## Environment and blocker
 
@@ -35,12 +35,12 @@ All runs used the release binary `src-tauri/target/release/usag8` in the ext4 co
 |---|---|
 | Release build | PASS — release profile 1m23s; DEB bundle 2.80 MiB |
 | Native rendering | PASS — actual Cinnamon/X11 window rendered the not-connected dashboard; themes were inspected in the app settings |
-| Resize | PARTIAL — 1280×720 window rendered, but the third provider row extended below the viewport; scrolling was not verified |
+| Resize and scroll | PASS — wheel scrolling at 1280×720 moved content and revealed the full last provider row and source caveat |
 | Themes | PASS — Light, Dark and System rendered; System resolved to Dark on this session |
 | Keyboard | PASS — Tab moved focus through overview, assistants and settings; Enter opened settings |
-| Offline | UNTESTED — system networking was not changed |
+| Offline | PASS — release app rendered in a user/network namespace with only loopback down; host networking remained connected |
 | Runs | 3 / 3 completed, each idle for five minutes |
-| Platform | Linux Mint 22.3 Cinnamon/X11; Wayland untested |
+| Platform | Linux Mint 22.3 Cinnamon/X11 accepted as the current target; Wayland untested |
 
 ## GTK4/libadwaita comparison
 

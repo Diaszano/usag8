@@ -40,12 +40,12 @@ Checked against the [Tauri Linux prerequisites](https://v2.tauri.app/start/prere
 | Release build | PASS — `npm run tauri build` produced `usag8_0.1.0_amd64.deb` (2.80 MiB) in the temporary ext4 copy; package was not installed |
 | Snapshot contract | PASS — Rust test confirms three `not_connected` providers, null usage and null `collected_at` |
 | Dark / Light / System | PASS — each option rendered in the native settings screen; System resolved to Dark on this session; choice is not persisted |
-| Native resize | PARTIAL — resized to 1280×720; window remained responsive, but the third provider row extended below the viewport and vertical scrolling was not verified |
+| Native resize and scroll | PASS — at 1280×720, wheel scrolling moved the content and brought the full Antigravity row and source caveat into view |
 | Keyboard navigation | PASS — Tab moved focus from “Visão geral” to “Assistentes” and then “Configurações”; Enter opened settings |
 | Window close/reopen | PASS — closing the app window exited the process; launching the release binary opened a new window |
-| Disconnected network | UNTESTED — system networking was not changed |
+| Disconnected network | PASS — release app launched in a user/network namespace (`unshare --user --map-root-user --net`); `ip -brief link` inside showed only loopback, down. The UI rendered three not-connected providers with unavailable usage. The host network was untouched. AT-SPI/IBus warnings occurred in the user namespace; they did not prevent rendering. |
 | Wayland session | UNTESTED — this machine reports X11 |
 
 ## Gate
 
-**PARTIAL / DEFERRED** — native tests, Clippy, a real X11 window, release build, themes, keyboard navigation and three idle performance runs now pass. Keep ADR-0001 Deferred until scrolling at the 1280×720 viewport is verified; offline behavior and Wayland remain untested. The third provider row extends below the fold.
+**PASS / ACCEPTED for Mint Cinnamon/X11** — native tests, Clippy, a real X11 window, release build, themes, keyboard navigation, 1280×720 scrolling, isolated offline startup and three idle performance runs pass. Wayland remains untested and no compatibility claim is made for other desktop environments.

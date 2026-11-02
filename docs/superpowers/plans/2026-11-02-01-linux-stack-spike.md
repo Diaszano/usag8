@@ -62,7 +62,7 @@
 
 - [x] **Step 1: Verify backend tests.** `cargo test --manifest-path src-tauri/Cargo.toml` and `cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings`; expected PASS.
 - [x] **Step 2: Verify a native window.** `npm run tauri dev` on the Mint desktop (not just a browser). Record whether it starts, missing libs and the actual desktop session.
-- [ ] **Step 3: Exercise empty state.** Check that `get_dashboard_snapshot` yields three unconnected providers with null usage and collectedAt; no credentials requested. If incorrect, write a failing Rust test in `src-tauri/src/providers.rs`, run targeted `cargo test`, make minimal fix, rerun.
+- [x] **Step 3: Exercise empty state.** Check that `get_dashboard_snapshot` yields three unconnected providers with null usage and collectedAt; no credentials requested. If incorrect, write a failing Rust test in `src-tauri/src/providers.rs`, run targeted `cargo test`, make minimal fix, rerun.
 - [x] **Step 4: Record GUI checks.** Test Dark/Light/System, resizing near 1280×720, keyboard navigation, window close/reopen and disconnected network. Mark each `PASS/FAIL/UNTESTED` in baseline report.
 - [x] **Step 5: Commit verified improvements only.** `git diff --check`; commit actual code/tests/reports as `test: verify native Tauri baseline`.
 
@@ -78,4 +78,4 @@
 - [x] **Step 4: Update ADR.** Record `Accepted`, `Rejected` or `Deferred`, test matrix, risks, and why; when unable to run on Mint choose **Deferred**.
 - [x] **Step 5: Validate and commit.** `git diff --check`; `git add docs/research/tauri-performance.md docs/decisions/ADR-0001-stack-evaluation.md && git commit -m "docs: decide Linux desktop stack from evidence"`.
 
-**Exit gate:** Only proceed to native UI implementation after an **Accepted** stack decision (or explicitly authorized limited frontend-only work).
+**Exit gate:** **Accepted for Linux Mint Cinnamon/X11.** Wayland and other desktop environments remain untested; no broader compatibility claim is made.
