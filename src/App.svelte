@@ -8,6 +8,7 @@
   import type { ThemePreference } from "./lib/theme";
   import { navigate } from "./lib/navigation";
   import type { NavigationAction, View } from "./lib/navigation";
+  import { toCompactProviderLabel } from "./lib/quick-view";
   import type { DashboardSnapshot, ProviderSnapshot } from "./lib/types";
 
   let view = $state<View>("dashboard");
@@ -87,6 +88,7 @@
         </section>
         <section class="panel providers" aria-labelledby="providers-title"><div class="section-head"><div><h2 id="providers-title">Assistentes</h2><p class="secondary">Clique para ver o estado individual</p></div><button class="secondary-button" onclick={refresh}>Atualizar</button></div>
           {#each snapshot.providers as provider (provider.id)}
+            {@const compact = toCompactProviderLabel(provider)}
             <div class="provider-item">
               <button class="provider-row" onclick={() => openProvider(provider)} aria-label={`Abrir detalhes de ${provider.displayName}`} aria-describedby={previewId === provider.id ? `preview-${provider.id}` : undefined}
                 onpointerenter={() => previewId = provider.id}
@@ -100,8 +102,8 @@
               </button>
               {#if previewId === provider.id}
                 <div class="provider-preview" id={`preview-${provider.id}`} role="tooltip">
-                  <strong>{provider.displayName}</strong>
-                  <span>{providerStateLabel(provider.state)} · {formatUsage(provider.usage)} · {qualityLabel(provider.usage)}</span>
+                  <strong>{compact.name}</strong>
+                  <span>{compact.stateLabel} · {compact.usageLabel} · {compact.qualityLabel}</span>
                 </div>
               {/if}
             </div>
@@ -117,11 +119,12 @@
         {:else}<p class="secondary">Nenhum provedor selecionado.</p>{/if}
       {:else if view === "quick-view"}
         {#if selectedProvider}
+          {@const compact = toCompactProviderLabel(selectedProvider)}
           <section class="panel quick-view" aria-label={`Visão rápida de ${selectedProvider.displayName}`}>
             <p class="eyebrow">ESTADO DO PROVEDOR</p>
-            <h2>{selectedProvider.displayName}</h2>
-            <p class="secondary">{providerStateLabel(selectedProvider.state)}</p>
-            <div class="empty-state"><strong>{formatUsage(selectedProvider.usage)}</strong><span>{qualityLabel(selectedProvider.usage)}</span></div>
+            <h2>{compact.name}</h2>
+            <p class="secondary">{compact.stateLabel}</p>
+            <div class="empty-state"><strong>{compact.usageLabel}</strong><span>{compact.qualityLabel}</span></div>
             <p class="secondary">{selectedProvider.usage?.period ?? "Período: indisponível"}</p>
             <div class="quick-view-actions"><button class="secondary-button" onclick={() => dispatchNavigation({ type: "provider", id: selectedProvider.id })}>Abrir detalhes</button><button class="secondary-button" onclick={() => dispatchNavigation({ type: "dashboard" })}>Voltar ao painel</button></div>
           </section>
