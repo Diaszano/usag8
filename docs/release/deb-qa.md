@@ -10,7 +10,7 @@
 | Tauri capabilities | PASS | `src-tauri/capabilities/default.json` grants only `core:default` to window `main`; no shell or broad filesystem permission. |
 | Frontend / Rust quality gates | PASS | In ext4 copy: `npm ci --offline` (72 packages, audit reported 0 vulnerabilities); `npm run check` (0 errors, 0 warnings); `npm test` (44 passed); `npm run build` passed; `cargo test --manifest-path src-tauri/Cargo.toml` (1 passed); `cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings` passed. |
 | DEB artifact contents / dependencies | PASS | `usag8_0.1.0_amd64.deb`, package `usag8`, version `0.1.0`, amd64, 2,932,726 bytes; Depends: `libwebkit2gtk-4.1-0`, `libgtk-3-0`; contains `/usr/bin/usag8`, desktop entry and 32/128/256px app icons. No maintainer scripts. |
-| Install/remove smoke | PARTIAL | Install/remove passed in an ephemeral Ubuntu 24.04 container, not the personal host. Final binary GUI smoke passed on Mint; installed-package Cinnamon menu launch remains pending explicit approval or a disposable Mint VM. |
+| Install/remove and desktop launch | PASS | Install/remove passed in an ephemeral Ubuntu 24.04 container. The final DEB installed in a disposable Mint 22.3 live VM, appeared in Cinnamon menu search, and launched the dashboard. No package was installed on the personal host. |
 
 The app reads no provider credentials, performs no provider network request, and has no telemetry or updater. This report tracks an internal test package only.
 
@@ -32,11 +32,12 @@ The app reads no provider credentials, performs no provider network request, and
 - Disposable environment: ephemeral Ubuntu 24.04 Docker container, amd64. It matches the package's Noble base but is not a Mint Cinnamon VM; installation ran as container root with `apt-get`, without `sudo` and without changing host packages.
 - `apt-get install --no-install-recommends /tmp/usag8.deb`: PASS on the package built before the final preview-only fix; package version `0.1.0` installed, `/usr/bin/usag8` and `/usr/share/applications/usag8.desktop` present, `ldd` reported no missing libraries. The final package was rebuilt after that fix; package metadata/dependencies did not change.
 - `apt-get remove usag8`: PASS; binary and desktop entry removed. A sentinel at `/root/.config/usag8/keep` remained unchanged. No app-created XDG data exists in this prototype.
-- Menu launch is not testable in the headless container. Separately, launched the final packaged executable extracted from this DEB on Mint Cinnamon/X11 inside an isolated network namespace. Dashboard rendered with providers not connected; hover preview remained visible while pointer was over it and closed after leaving the group; Tab/focus showed the same preview; Esc closed a hover-open preview while restoring focus to the trigger; Enter opened provider details. This was an extracted-binary smoke, not a menu launch from an installed package.
+- Installed the final `usag8_0.1.0_amd64.deb` into a disposable Linux Mint 22.3 Cinnamon live VM using the read-only host share. Cinnamon menu search found the installed `usag8` entry; launching it rendered the dashboard with three example providers marked `Não conectado`, unavailable limits, and no collection timestamp. This confirms the installed desktop entry and launch path on Cinnamon.
+- Separately, launched the final packaged executable extracted from this DEB on Mint Cinnamon/X11 inside an isolated network namespace. Dashboard rendered with providers not connected; hover preview remained visible while pointer was over it and closed after leaving the group; Tab/focus showed the same preview; Esc closed a hover-open preview while restoring focus to the trigger; Enter opened provider details.
 - No app network access was available during the extracted-binary smoke; no system tray or provider setup was used. Theme changes and window resizing were not rechecked in this package smoke; theme/viewport evidence and remaining gaps are in `docs/qa/keyboard-and-viewports.md` and the Plan 03 ledger.
 
 ## Publication gate
 
 - **INTERNAL-ONLY.** Name, domain, package namespace, and final icon provenance remain unresolved; see `branding-gate.md`.
-- Supported evidence is limited to Linux Mint 22.3 Cinnamon 6.6.9/X11. The container install used Ubuntu 24.04 packages and did not test the desktop menu or Cinnamon itself.
+- Supported desktop evidence is limited to Linux Mint 22.3 Cinnamon/X11; Wayland and other desktops remain untested. The install/remove container used Ubuntu 24.04 packages.
 - No auto-updater, telemetry, provider network access, credentials, or install/remove scripts are present. The passing internal package is not public-release approval.

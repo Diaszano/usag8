@@ -1,6 +1,6 @@
 # Internal DEB Package and Linux QA Implementation Plan
 
-**Execution status:** Partial. The internal DEB build, metadata inspection, container install/remove, and extracted-binary Mint/X11 smoke passed. Installed-package Cinnamon menu launch remains pending a disposable Mint VM or explicit approval to install/remove the package on the personal host. Public branding clearance is unresolved and the artifact remains internal-only.
+**Execution status:** Complete within the internal-only gate. The internal DEB build, metadata inspection, container install/remove, extracted-binary Mint/X11 smoke, and installed-package Cinnamon menu launch in a disposable Mint 22.3 live VM passed. Public branding clearance is unresolved; the artifact remains internal-only.
 
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` (recommended) or `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkboxes for tracking.
@@ -60,9 +60,9 @@
 
 **Interfaces:** Tested commands and observations, no hidden installer; manual user approval before installation on personal machine.
 
-- [x] **Step 1: Select disposable system.** Used ephemeral Ubuntu 24.04 container matching Noble dependencies; no Mint VM was available. Explicit approval is still required before any `sudo` action on the personal host.
+- [x] **Step 1: Select disposable system.** Used an ephemeral Ubuntu 24.04 container for install/remove and a verified Linux Mint 22.3 Cinnamon live VM for the desktop-menu check. No package was installed on the personal host.
 - [x] **Step 2: Install package.** Installed the verified DEB in the container; `/usr/bin/usag8`, desktop entry, and runtime libraries were present.
-- [ ] **Step 2b: Launch the installed package from the Cinnamon menu.** `UNTESTED`: the container is headless and not Cinnamon; personal-host installation requires explicit approval, or use a disposable Mint VM.
+- [x] **Step 2b: Launch the installed package from the Cinnamon menu.** Installed `usag8_0.1.0_amd64.deb` in the disposable Mint 22.3 live VM; Cinnamon search found the `usag8` entry and launching it rendered the dashboard with three example providers marked not connected and no usage values.
 - [x] **Step 3: Validate fallback.** Launch offline and with no system tray/providers; check that UI still shows unavailable (not fabricated usage), Dark/Light, keyboard and window resize.
 - [x] **Step 4: Uninstall.** `sudo apt remove <actual-package-name>`; verify app binary/menu entry removed and user data not silently deleted. Record exact installed package name from metadata.
 - [x] **Step 5: Commit evidence.** `git add docs/release/deb-qa.md && git commit -m "test: record DEB install and removal smoke"`.
