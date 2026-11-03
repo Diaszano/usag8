@@ -1,6 +1,6 @@
-# Usag8 — Superpowers Starter Kit
+# Usag8
 
-**Status: candidate development stack, not a shipped application.**
+**Status:** Internal Linux-first Tauri application. Plans 01–06 are complete within their gates. Plan 07 revalidated provider sources and concluded **NO-GO — sem integração**. No provider snapshots are connected; there are no quota guesses, credentials, analytics or provider network calls. The internal DEB is not a public release.
 
 A minimal Linux-first Tauri 2 + Rust + Svelte 5 + TypeScript prototype, accompanied by Superpowers-oriented agent instructions. All provider snapshots are deliberately **not connected**; there are no quota guesses, credentials, analytics or network calls.
 
@@ -8,7 +8,7 @@ A minimal Linux-first Tauri 2 + Rust + Svelte 5 + TypeScript prototype, accompan
 - Tauri desktop shell and a Rust `get_dashboard_snapshot` command (stub with no provider access)
 - Svelte Dark / Light / System preview, Dashboard / Details / Settings and browser-only preview fallback
 - Pure formatting functions, frontend unit tests and a Rust test
-- `AGENTS.md`, proposed ADR, six scoped Superpowers implementation plans and specs, workflow guidance
+- `AGENTS.md`, architecture decisions, seven scoped Superpowers plans and specs, workflow guidance
 - Linux Mint environment diagnostic and placeholder app icons
 
 ## Getting started on Linux Mint Cinnamon
@@ -63,17 +63,20 @@ scripts/doctor.sh               Local Mint environment diagnostic
 docs/stack.md                   Candidate stack, boundaries and risks
 docs/superpowers.md             Setup and agent workflow
 docs/plans/                     Historical initial MVP plan
-docs/superpowers/specs/         Six focused feature specifications
-docs/superpowers/plans/         Six executable plans (unchecked tasks)
+docs/superpowers/specs/         Seven focused specifications
+docs/superpowers/plans/         Seven plans with recorded execution status
 docs/decisions/                 Architecture decision records
 ```
 
-### Boundaries
+### Project status and boundaries
+- Plans 01–06 are complete within their gates; Plan 07 is completed research with **NO-GO — sem integração**. A provider collector requires explicit source-specific approval and a new implementation plan.
+- Tauri 2 was accepted for Linux Mint Cinnamon/X11; Wayland remains untested.
+- The DEB is internal-only; public release remains blocked by branding and identifier review.
 - No SQLite yet: the first spike does not require persistence.
 - No real data or metrics: percentages from Penpot are illustrative, so none is present in the code.
 - System tray / global floating sidebar / global shortcuts and text in the panel are deferred and need desktop-specific verification.
 - The `usag8` product name and package identifier are provisional.
-- This kit is new source; it does **not** modify existing files or designs in Penpot.
+- Penpot remains design exploration; implementation does not copy Metria branding.
 
 ### Source references
 - https://github.com/obra/superpowers
